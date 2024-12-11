@@ -1,21 +1,10 @@
-//Jeff Chastine
-#include <Windows.h>
-#include <GL/glew.h>
-#include <GL/freeglut.h>
-#include <iostream>
-
-#include "Model.h"
-
-#define WIDTH 600
-#define HEIGHT 600
-
-#define INTERVAL 15
+#include "main.h"
 
 int POS_X, POS_Y;
 
-std::string model_name = "models/Lowpoly_Fox.obj";
+std::string model_name = "models/Earth.obj";
 
-GLfloat light_pos[] = { -10.0f, 10.0f, 100.00f, 1.0f };
+GLfloat light_pos[] = {-10.0f, 10.0f, 100.00f, 1.0f};
 
 float pos_x, pos_y, pos_z;
 float angle_x = 30.0f, angle_y = 0.0f;
@@ -48,15 +37,22 @@ void init() {
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
 
-    model.LoadModel(model_name.c_str());
+    model.load(model_name.c_str());
+
+    pos_x = model.pos_x;
+    pos_y = model.pos_y;
+    pos_z = model.pos_z - 1.0f;
+
+    zoom_per_scroll = -model.pos_z / 10.0f;
 }
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    glTranslatef(0.0f, -30.0f, -500.0f);
-    glRotatef(30.0f, 1.0f, 1.0f, 0.0f);
-    model.DrawModel();
+    glTranslatef(pos_x, pos_y, pos_z);
+    glRotatef(angle_x, 1.0f, 0.0f, 0.0f);
+    glRotatef(angle_y, 0.0f, 1.0f, 0.0f);
+    model.draw();
     glutSwapBuffers();
 }
 
@@ -68,6 +64,33 @@ void timer(int value) {
     glutTimerFunc(INTERVAL, timer, 0);
 }
 
+void mouse(int button, int state, int x, int y) {
+    is_updated = true;
+
+    if (button == GLUT_LEFT_BUTTON) {
+        if (state == GLUT_DOWN) {
+            x_old = x;
+            y_old = y;
+            is_holding_mouse = true;
+        } else
+            is_holding_mouse = false;
+    } else if (state == GLUT_UP) {
+        switch (button) {
+        case 3:
+            if (current_scroll > 0) {
+                current_scroll--;
+                pos_z += zoom_per_scroll;
+            }
+            break;
+        case 4:
+            if (current_scroll < 15) {
+                current_scroll++;
+                pos_z -= zoom_per_scroll;
+            }
+            break;
+        }
+    }
+}
 
 void motion(int x, int y) {
     if (is_holding_mouse) {
@@ -89,7 +112,7 @@ void motion(int x, int y) {
     }
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     glutInit(&argc, argv);
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
@@ -103,6 +126,7 @@ int main(int argc, char** argv) {
     glutCreateWindow("Load Model");
     init();
     glutDisplayFunc(display);
+    glutMouseFunc(mouse);
     glutMotionFunc(motion);
     glutTimerFunc(0, timer, 0);
     glutMainLoop();
