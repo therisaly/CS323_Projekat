@@ -50,6 +50,13 @@ public:
 		z += rhs.z;
 		return *this;
 	}
+	Vec3& operator+=(const float rhs)
+	{
+		x += rhs;
+		y += rhs;
+		z += rhs;
+		return *this;
+	}
 	Vec3& operator=(const Vec3& rhs)
 	{
 		x = rhs.x;

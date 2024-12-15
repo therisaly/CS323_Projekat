@@ -29,10 +29,16 @@
     <ClInclude Include="Vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
+    <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
+    <ClInclude Include="Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

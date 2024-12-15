@@ -1,134 +1,133 @@
-#include "main.h"
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+#include <iostream>
+#include "GameObject.h"
 
-int POS_X, POS_Y;
+// Window dimensions
+const int WIDTH = 800;
+const int HEIGHT = 600;
+const int TARGET_FPS = 60;
+const int FRAME_DELAY = 1000 / TARGET_FPS;  // Milliseconds per frame
 
-std::string model_name = "models/Earth.obj";
+// Camera position
+float cameraX = 0.0f, cameraY = 5.0f, cameraZ = 20.0f;
+float lookAtX = 0.0f, lookAtY = 0.0f, lookAtZ = 0.0f;
+float upX = 0.0f, upY = 1.0f, upZ = 0.0f;
 
-GLfloat light_pos[] = {-10.0f, 10.0f, 100.00f, 1.0f};
+GLfloat lightPosition[] = { 10.0f, 10.0f, 10.0f, 1.0f };
 
-float pos_x, pos_y, pos_z;
-float angle_x = 30.0f, angle_y = 0.0f;
-
-int x_old = 0, y_old = 0;
-int current_scroll = 5;
-float zoom_per_scroll;
-
-bool is_holding_mouse = false;
-bool is_updated = false;
-
+GameObject platform;
 Model model;
 
+// Initialization
 void init() {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
+    glEnable(GL_DEPTH_TEST);  // Enable depth testing
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);  // Set background color
+    glViewport(0, 0, WIDTH, HEIGHT);  // Set viewport
+
+    // Set up projection matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(20.0, 1.0, 1.0, 2000.0);
+    gluPerspective(45.0, (float)WIDTH / (float)HEIGHT, 0.1, 100.0);
+
+    model.load("models/platformBasic.obj");
+    platform.Initialize(model);
+
+    // Switch to model-view matrix
     glMatrixMode(GL_MODELVIEW);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_LINE_SMOOTH);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_DEPTH_TEST);
-
-    model.load(model_name.c_str());
-
-    pos_x = model.pos_x;
-    pos_y = model.pos_y;
-    pos_z = model.pos_z - 1.0f;
-
-    zoom_per_scroll = -model.pos_z / 10.0f;
+    glLoadIdentity();
 }
 
+// Draw XYZ axes
+void drawAxes() {
+    glBegin(GL_LINES);
+    // X-axis (red)
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex3f(-10.0f, 0.0f, 0.0f);
+    glVertex3f(10.0f, 0.0f, 0.0f);
+
+    // Y-axis (green)
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(0.0f, -10.0f, 0.0f);
+    glVertex3f(0.0f, 10.0f, 0.0f);
+
+    // Z-axis (blue)
+    glColor3f(0.0f, 0.0f, 1.0f);
+    glVertex3f(0.0f, 0.0f, -10.0f);
+    glVertex3f(0.0f, 0.0f, 10.0f);
+    glEnd();
+}
+
+// Display callback
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear color and depth buffers
     glLoadIdentity();
-    glTranslatef(pos_x, pos_y, pos_z);
-    glRotatef(angle_x, 1.0f, 0.0f, 0.0f);
-    glRotatef(angle_y, 0.0f, 1.0f, 0.0f);
-    model.draw();
+
+    // Set up the camera
+    gluLookAt(cameraX, cameraY, cameraZ,  // Camera position
+        lookAtX, lookAtY, lookAtZ,  // Look at the origin
+        upX, upY, upZ);             // Up vector
+
+    glPushMatrix();  // Save the current matrix state
+
+    // Apply a transformation to the model
+    glTranslatef(5.0f, 0.0f, 0.0f);  // Move the model 5 units along the X-axis
+
+    platform.Render();  // Render the model (all vertices are transformed by the current matrix)
+
+    glPopMatrix();
+    drawAxes();
+
     glutSwapBuffers();
 }
 
-void timer(int value) {
-    if (is_updated) {
-        is_updated = false;
-        glutPostRedisplay();
-    }
-    glutTimerFunc(INTERVAL, timer, 0);
+// Update function
+void update(int value) {
+    platform.Update();
+
+    // Redisplay the scene
+    glutPostRedisplay();
+
+    // Schedule the next update
+    glutTimerFunc(FRAME_DELAY, update, 0);
 }
 
-void mouse(int button, int state, int x, int y) {
-    is_updated = true;
-
-    if (button == GLUT_LEFT_BUTTON) {
-        if (state == GLUT_DOWN) {
-            x_old = x;
-            y_old = y;
-            is_holding_mouse = true;
-        } else
-            is_holding_mouse = false;
-    } else if (state == GLUT_UP) {
-        switch (button) {
-        case 3:
-            if (current_scroll > 0) {
-                current_scroll--;
-                pos_z += zoom_per_scroll;
-            }
-            break;
-        case 4:
-            if (current_scroll < 15) {
-                current_scroll++;
-                pos_z -= zoom_per_scroll;
-            }
-            break;
-        }
+// Keyboard input for camera movement
+void keyboard(unsigned char key, int x, int y) {
+    switch (key) {
+    case 'w': cameraZ -= 1.0f; break;  // Move forward
+    case 's': cameraZ += 1.0f; break;  // Move backward
+    case 'a': cameraX -= 1.0f; break;  // Move left
+    case 'd': cameraX += 1.0f; break;  // Move right
+    case 'q': cameraY += 1.0f; break;  // Move up
+    case 'e': cameraY -= 1.0f; break;  // Move down
+    case 27: exit(0); break;           // Escape key to exit
     }
+    glutPostRedisplay();  // Redraw the scene
 }
 
-void motion(int x, int y) {
-    if (is_holding_mouse) {
-        is_updated = true;
-
-        angle_y += (x - x_old);
-        x_old = x;
-        if (angle_y > 360.0f)
-            angle_y -= 360.0f;
-        else if (angle_y < 0.0f)
-            angle_y += 360.0f;
-
-        angle_x += (y - y_old);
-        y_old = y;
-        if (angle_x > 90.0f)
-            angle_x = 90.0f;
-        else if (angle_x < -90.0f)
-            angle_x = -90.0f;
-    }
-}
-
-int main(int argc, char **argv) {
+// Main function
+int main(int argc, char** argv) {
     glutInit(&argc, argv);
-
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
-    glEnable(GL_MULTISAMPLE);
-    glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
-    glutSetOption(GLUT_MULTISAMPLE, 8);
-    POS_X = (glutGet(GLUT_SCREEN_WIDTH) - WIDTH) >> 1;
-    POS_Y = (glutGet(GLUT_SCREEN_HEIGHT) - HEIGHT) >> 1;
-    glutInitWindowPosition(POS_X, POS_Y);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);  // Double buffer, RGB color, Depth buffer
     glutInitWindowSize(WIDTH, HEIGHT);
-    glutCreateWindow("Load Model");
-    init();
-    glutDisplayFunc(display);
-    glutMouseFunc(mouse);
-    glutMotionFunc(motion);
-    glutTimerFunc(0, timer, 0);
-    glutMainLoop();
+    glutCreateWindow("3D Scene with XYZ Axes");
+
+    glewInit();
+
+    init();  // Initialize OpenGL settings
+
+    glutDisplayFunc(display);  // Register display callback
+    glutKeyboardFunc(keyboard);  // Register keyboard callback
+
+    // Start the update loop
+    glutTimerFunc(FRAME_DELAY, update, 0);
+
+    glutMainLoop();  // Enter GLUT event processing loop
+
     return 0;
 }
