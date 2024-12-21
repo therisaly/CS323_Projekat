@@ -15,10 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stb_image.cpp">
+    <ClCompile Include="ComponentManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,16 +35,19 @@
     <ClInclude Include="Vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BoxCollider.h">
+    <ClInclude Include="Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
+    <ClInclude Include="EntityManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
