@@ -11,12 +11,33 @@ class ComponentManager
 {
 public:
 	ComponentManager() = default;
-	void AddNewComponent(std::unique_ptr<Component> component);
 
-	auto& GetComponents()
+	template<typename T> 
+	void AddNewComponent(EntityID entityID, T componentType)
 	{
-		return components;
+		auto& components = GetComponentMap<T>();
+
+		components[entityID].push_back(componentType);
+	}
+	template<typename T>
+	void PrintAllComponents() 
+	{
+		T component; 
+		for (const auto& pair : GetComponentMap<T>())
+		{
+			std::printf("Entity ID: %d\n", pair.first);
+			for (int i = 0; i < pair.second.size(); i++)
+			{
+				std::printf("Component %d: %s\n", i, typeid(component).name());
+			}
+
+		}
 	}
 private:
-	std::unordered_map<EntityID, std::vector<std::unique_ptr<Component>>> components; 
+	template<typename T>
+	std::unordered_map<EntityID, std::vector<T>>& GetComponentMap()
+	{
+		static std::unordered_map<EntityID, std::vector<T>> components;
+		return components;
+	}
 };
