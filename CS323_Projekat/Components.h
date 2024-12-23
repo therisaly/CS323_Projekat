@@ -3,6 +3,8 @@
 
 namespace Components{
 
+	using EntityID = int;
+
 	class Component
 	{
 	public:
@@ -10,15 +12,26 @@ namespace Components{
 		{
 			std::printf("Deconstructing Component\n");
 		}
+		int GetEntityID() const
+		{
+			return entityID;
+		}
+	protected:
+		EntityID entityID = 0;
+
+		Component(EntityID entityID)
+			: entityID(entityID)
+		{}
 	};
 	class Transform : public Component
 	{
 	public:
-		Transform()
+		Transform(EntityID eID)
+			:
+			Component(eID)
 		{
 			std::printf("Constructing Transform Component\n");
 		}
-	private:
 		Vef3 position;
 		Vef3 scale;
 		Vef3 rotation;
@@ -27,7 +40,9 @@ namespace Components{
 	class Mesh : public Component
 	{
 	public:
-		Mesh()
+		Mesh(EntityID eID)
+			:
+			Component(eID)
 		{
 			std::printf("Constructing Mesh Component\n");
 		}
@@ -38,7 +53,9 @@ namespace Components{
 	class Collider : public Component
 	{
 	public:
-		Collider()
+		Collider(EntityID eID)
+			:
+			Component(eID)
 		{
 			std::printf("Constructing Collider Component\n");
 		}
