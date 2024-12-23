@@ -7,12 +7,16 @@
 using namespace Components;
 using EntityID = int;
 
-
 class ComponentManager
 {
 public:
 	ComponentManager() = default;
-	void AddNewComponent(EntityID id, std::unique_ptr<Component> component);
+	void AddNewComponent(std::unique_ptr<Component> component);
+
+	auto& GetComponents()
+	{
+		return components;
+	}
 private:
-	std::unordered_map<EntityID, std::unique_ptr<Component>> components;
+	std::unordered_map<EntityID, std::vector<std::unique_ptr<Component>>> components; 
 };

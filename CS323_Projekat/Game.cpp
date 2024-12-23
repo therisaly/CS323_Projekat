@@ -11,9 +11,11 @@ void Game::Go()
 {
 
 	EntityID player = entityManager.AddNewEntity();
-	auto transformComponent = std::make_unique<Transform>();
+	EntityID player2 = entityManager.AddNewEntity();
 
-	componentManager.AddNewComponent(player, std::move(transformComponent));
+	componentManager.AddNewComponent(std::make_unique<Transform>(player));
+	componentManager.AddNewComponent(std::make_unique<Transform>(player));
+	componentManager.AddNewComponent(std::make_unique<Transform>(player2));
 
 	std::printf("Working\n");
 }
