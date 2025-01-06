@@ -17,7 +17,7 @@ public:
 	{
 		auto& components = GetComponentMap<T>();
 
-		components[entityID].push_back(componentType);
+		components[entityID] = componentType;
 	}
 	template<typename T>
 	void PrintAllComponents() 
@@ -26,18 +26,13 @@ public:
 		for (const auto& pair : GetComponentMap<T>())
 		{
 			std::printf("Entity ID: %d\n", pair.first);
-			for (int i = 0; i < pair.second.size(); i++)
-			{
-				std::printf("Component %d: %s\n", i, typeid(component).name());
-			}
-
+			std::printf("Component: %s\n", typeid(component).name());
 		}
 	}
-private:
 	template<typename T>
-	std::unordered_map<EntityID, std::vector<T>>& GetComponentMap()
+	std::unordered_map<EntityID, T>& GetComponentMap()
 	{
-		static std::unordered_map<EntityID, std::vector<T>> components;
+		static std::unordered_map<EntityID, T> components; 
 		return components;
 	}
 };
