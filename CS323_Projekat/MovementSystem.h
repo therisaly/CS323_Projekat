@@ -5,7 +5,7 @@ class MovementSystem
 {
 public:
 	MovementSystem() = default;
-	void MoveEntity(EntityID entityID, Vef3 velocity, std::unordered_map<EntityID, std::vector<std::unique_ptr<Component>>> components)
+	void MoveEntity(EntityID entityID, Vef3 velocity, std::unordered_map<EntityID, Transform>& components)
 	{
 		auto iterator = components.find(entityID);
 

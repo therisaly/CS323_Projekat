@@ -1,28 +1,33 @@
 #include "Game.h"
 
-Game::Game(ComponentManager& componentManager, EntityManager& entityManager)
+Game::Game(ComponentManager& componentManager, EntityManager& entityManager, MeshRenderSystem& meshRenderSystem)
 	:
 	componentManager(componentManager),
-	entityManager(entityManager)
+	entityManager(entityManager),
+	meshRenderSystem(meshRenderSystem)
 {
 }
 
 void Game::Go()
 {
 
-	EntityID player = entityManager.AddNewEntity();
-	EntityID player2 = entityManager.AddNewEntity();
+	player = entityManager.AddNewEntity();
+	player2 = entityManager.AddNewEntity();
 
 	componentManager.AddNewComponent(player, Transform{});
-	componentManager.AddNewComponent(player, Transform{});
-
-	componentManager.AddNewComponent(player, Mesh{});
 	componentManager.AddNewComponent(player2, Transform{});
 
-	componentManager.PrintAllComponents<Transform>();
-	componentManager.PrintAllComponents<Mesh>();
+	Mesh mesh1;
+	MeshLoader::LoadMesh("models/Earth.obj", mesh1);
 
+	componentManager.AddNewComponent(player, Velocity{});
+	componentManager.AddNewComponent(player2, Velocity{});
+	componentManager.AddNewComponent(player, mesh1); 
 
-
-	std::printf("Working\n");
 }
+
+void Game::RenderTest()
+{
+	meshRenderSystem.RenderMesh(player, componentManager.GetComponentMap<Mesh>());
+}
+
