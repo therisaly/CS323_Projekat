@@ -1,0 +1,96 @@
+newmtl kuca1:lambert2SG
+illum 3
+Kd 0.50 0.28 0.30
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca1:lambert3SG
+illum 3
+Kd 0.04 0.04 0.05
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca1:lambert4SG
+illum 3
+Kd 0.09 0.12 0.19
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca1:lambert5SG
+illum 3
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca2:lambert2SG
+illum 3
+Kd 0.27 0.50 0.26
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca2:lambert3SG
+illum 3
+Kd 0.04 0.04 0.05
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca2:lambert4SG
+illum 3
+Kd 0.09 0.12 0.19
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca2:lambert5SG
+illum 3
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca3:lambert2SG
+illum 3
+Kd 1.00 0.99 0.96
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca3:lambert3SG
+illum 3
+Kd 0.04 0.04 0.05
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca3:lambert4SG
+illum 3
+Kd 0.09 0.12 0.19
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca4:lambert2SG
+illum 3
+Kd 0.53 0.49 0.24
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca4:lambert3SG
+illum 3
+Kd 0.04 0.04 0.05
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca4:lambert4SG
+illum 3
+Kd 0.09 0.12 0.19
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl kuca4:lambert5SG
+illum 3
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert2SG
+illum 3
+Kd 0.38 0.54 0.34
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00

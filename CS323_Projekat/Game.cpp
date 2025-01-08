@@ -18,7 +18,7 @@ void Game::Go()
 	componentManager.AddNewComponent(player2, Transform{});
 
 	Mesh mesh1;
-	MeshLoader::LoadMesh("models/Earth.obj", mesh1);
+	MeshLoader::LoadMesh("models/rotatingPlatform1.obj", mesh1);
 
 	componentManager.AddNewComponent(player, Velocity{});
 	componentManager.AddNewComponent(player2, Velocity{});

@@ -10,9 +10,9 @@ int POS_X, POS_Y;
 int WIDTH = 400;
 int HEIGHT = 200;
 
-std::string model_name = "models/Earth.obj";
+std::string model_name = "models/rotatingPlatform1.obj";
 
-GLfloat light_pos[] = { -10.0f, 10.0f, 100.00f, 1.0f };
+GLfloat light_pos[] = { 0.0f, 10.0f, 20.0f, 0.0f };
 
 float pos_x, pos_y, pos_z;
 float angle_x = 30.0f, angle_y = 0.0f;
@@ -33,7 +33,15 @@ Game game(componentManager, entityManager, meshRenderSystem);
 void init() {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+
+    GLfloat ambient_light[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    GLfloat diffuse_light[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+    GLfloat specular_light[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specular_light);
     glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -52,10 +60,11 @@ void init() {
     game.Go();
 }
 
+
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    glTranslatef(0, 0, -10);
+    glTranslatef(0, 0, -80);
     glRotatef(angle_x, 1.0f, 0.0f, 0.0f);
     glRotatef(angle_y, 0.0f, 1.0f, 0.0f);
 
